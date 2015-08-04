@@ -238,8 +238,8 @@ def create_launch_config(connection, module):
         except BotoServerError, e:
             module.fail_json(msg=str(e))
 
-    result = dict(
-            ((a[0], a[1]) for a in vars(launch_configs[0]).items() if a[0] not in ('connection', 'created_time')))
+    ignore_attribs = ['connection', 'created_time', 'instance_monitoring', 'block_device_mappings']
+    result = dict(((a[0], a[1]) for a in vars(launch_configs[0]).items() if a[0] not in ignore_attribs))
     result['created_time'] = str(launch_configs[0].created_time)
 
     module.exit_json(changed=changed, name=result['name'], created_time=result['created_time'],
